@@ -10,7 +10,7 @@ DIRECTORY='plugins'
 options=':l:h'
 
 usage(){
-  echo "-l deploy local to folder"
+  echo "-l <path> deploy local to folder"
   echo "-h deploy to heroku"
 }
 
