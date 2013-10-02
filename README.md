@@ -8,7 +8,7 @@ scripts that deploys a collection of ES plugins to either a local webserver or t
 Currently to `plugins/`
 
 ```Bash
-  $ ./deploy_plugins.sh -l
+  $ ./deploy_plugins.sh -l <path>
 ```
 
 ## Deploy to heroku
