@@ -7,20 +7,32 @@ HEAD_GIT_URL=https://github.com/mobz/elasticsearch-head.git
 ICU_GIT_URL=https://github.com/elasticsearch/elasticsearch-analysis-icu.git
 
 DIRECTORY='plugins'
-options='lh'
+options=':l:h'
 
 usage(){
   echo "-l deploy local to folder"
   echo "-h deploy to heroku"
 }
 
+write_config_ru(){
+  echo -e "map '/' do
+    use Rack::Static, urls: [''],
+                      root: File.expand_path('./'),
+                      index: 'index.html'
+    run lambda {}
+  end" > config.ru
+}
+
 deploy_local(){
-  echo "deploy local";
-  git clone $KOPF_GIT_URL $DIRECTORY/kopf
-  git clone $INQUISITOR_GIT_URL $DIRECTORY/inquisitor
-  git clone $PARAMEDIC_GIT_URL $DIRECTORY/paramedic 
-  git clone $HEAD_GIT_URL $DIRECTORY/head
-  git clone $ICU_GIT_URL $DIRECTORY/icu
+  directory=$1
+  git clone $KOPF_GIT_URL $directory/kopf
+  git clone $INQUISITOR_GIT_URL $directory/inquisitor
+  git clone $PARAMEDIC_GIT_URL $directory/paramedic 
+  git clone $HEAD_GIT_URL $directory/head
+  git clone $ICU_GIT_URL $directory/icu
+  cd $directory
+  write_config_ru
+  write_index
 }
 
 write_index(){
@@ -53,12 +65,8 @@ deploy_heroku(){
   mkdir $DIRECTORY
   cd $DIRECTORY
   git init
-echo -e "map '/' do
-  use Rack::Static, urls: [''],
-                    root: File.expand_path('./'),
-                    index: 'index.html'
-  run lambda {}
-end" > config.ru
+
+  write_config_ru
 
   echo -e "source 'https://rubygems.org/'
   ruby '2.0.0'
@@ -79,10 +87,9 @@ end" > config.ru
   heroku create
   git push heroku master
 }
-
 while getopts $options opt; do
   case $opt in
-    l) deploy_local;;
+    l) deploy_local $2;;
     h) deploy_heroku;;
     *) usage;;
   esac
