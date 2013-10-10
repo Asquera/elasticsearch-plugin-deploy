@@ -14,6 +14,10 @@ usage(){
   echo "-h deploy to heroku"
 }
 
+copy_files(){
+  cp -R files/. plugins/
+}
+
 deploy_local(){
   directory=$1
   git clone $KOPF_GIT_URL $directory/kopf
@@ -22,12 +26,6 @@ deploy_local(){
   git clone $HEAD_GIT_URL $directory/head
   git clone $ICU_GIT_URL $directory/icu
   cd $directory
-  write_config_ru
-  write_index
-}
-
-copy_files(){
-  cp -R files/. plugins/
 }
 
 deploy_heroku(){
