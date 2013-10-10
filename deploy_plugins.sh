@@ -26,7 +26,7 @@ deploy_local(){
   git clone $PARAMEDIC_GIT_URL $directory/paramedic 
   git clone $HEAD_GIT_URL $directory/head
   git clone $ICU_GIT_URL $directory/icu
-  cd $directory
+  copy_files
 }
 
 update_heroku(){
