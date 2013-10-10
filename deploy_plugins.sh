@@ -7,7 +7,8 @@ HEAD_GIT_URL=https://github.com/mobz/elasticsearch-head.git
 ICU_GIT_URL=https://github.com/elasticsearch/elasticsearch-analysis-icu.git
 
 DIRECTORY='plugins'
-options=':l:h'
+options=':l:uch'
+create_update= 
 
 usage(){
   echo "-l <path> deploy local to folder"
@@ -30,7 +31,13 @@ copy_files(){
   cp -R files/. plugins/
 }
 
-deploy_heroku(){
+update_heroku(){
+  cd $DIRECTORY
+  git submodule foreach git pull origin master
+  cd ..
+}
+
+create_heroku(){
   mkdir $DIRECTORY
 
   copy_files
@@ -46,16 +53,32 @@ deploy_heroku(){
   git submodule add $HEAD_GIT_URL head
   git submodule add $ICU_GIT_URL icu
   git commit -m "added submodules"
-
   heroku create
-  git push heroku master
 }
+
+deploy_heroku(){
+  if [[ -z "$1" ]]; then
+    usage
+    exit 1
+  fi
+  if [[ $1 = 'u' ]]; then
+    update_heroku
+  fi
+  if [[ $1 = 'c' ]]; then
+    create_heroku
+  fi
+  cd $DIRECTORY
+  git push heroku master
+  cd ..
+}
+
 while getopts $options opt; do
   case $opt in
     l) deploy_local $2;;
-    h) deploy_heroku;;
+    h) deploy_heroku $create_update;;
+    u) create_update='u';;
+    c) create_update='c';;
     *) usage;;
   esac
 done
-
 
