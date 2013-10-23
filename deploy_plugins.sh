@@ -13,7 +13,7 @@ create_update=
 usage(){
   echo "-l <path> deploy local to folder"
   echo "-c -h deploy to heroku and create new app"
-  echo "-u -h deploy to herokue and update app"
+  echo "-u -h deploy to heroku and update app"
 }
 
 copy_files(){
