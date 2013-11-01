@@ -5,6 +5,7 @@ INQUISITOR_GIT_URL=https://github.com/polyfractal/elasticsearch-inquisitor.git
 PARAMEDIC_GIT_URL=https://github.com/karmi/elasticsearch-paramedic.git
 HEAD_GIT_URL=https://github.com/mobz/elasticsearch-head.git
 ICU_GIT_URL=https://github.com/elasticsearch/elasticsearch-analysis-icu.git
+BIGDESK_GIT_URL=https://github.com/lukas-vlcek/bigdesk.git
 
 DIRECTORY='plugins'
 options=':l:uch'
@@ -27,6 +28,7 @@ deploy_local(){
   git clone $PARAMEDIC_GIT_URL $directory/paramedic 
   git clone $HEAD_GIT_URL $directory/head
   git clone $ICU_GIT_URL $directory/icu
+  git clone $BIGDESK_GIT_URL $directory/bigdesk
   copy_files
 }
 
@@ -51,6 +53,7 @@ create_heroku(){
   git submodule add $PARAMEDIC_GIT_URL paramedic
   git submodule add $HEAD_GIT_URL head
   git submodule add $ICU_GIT_URL icu
+  git submodule add $BIGDESK_GIT_URL bigdesk
   git commit -m "added submodules"
   heroku create
 }
